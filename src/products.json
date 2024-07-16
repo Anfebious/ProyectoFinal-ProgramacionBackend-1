@@ -1,0 +1,28 @@
+[
+  {
+    "id": "beb0bc475d5cbfb67e0638ec",
+    "title": "Curso de tortas",
+    "description": "Curso de tortas",
+    "code": "A001",
+    "price": 10000,
+    "status": true,
+    "stock": 100,
+    "category": "Tortas",
+    "thumbnail": [
+      "/photo"
+    ]
+  },
+  {
+    "id": "466ed562ac2050cc0f9cda72",
+    "title": "Curso de Tortas Clasicas",
+    "description": "Curso de tortas",
+    "code": "A001",
+    "price": 10000,
+    "status": true,
+    "stock": 100,
+    "category": "Tortas",
+    "thumbnail": [
+      "/photo"
+    ]
+  }
+]

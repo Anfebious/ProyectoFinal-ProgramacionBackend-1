@@ -1,0 +1,19 @@
+{
+  "name": "desafio-express",
+  "version": "1.0.0",
+  "description": "DesafioExpress",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "nodemon ./src/app.js"
+  },
+  "author": "Eric",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "express": "^4.19.2",
+    "express-handlebars": "^7.1.2",
+    "socket.io": "^4.7.5"
+  }
+}
