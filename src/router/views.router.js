@@ -1,5 +1,6 @@
 import express from "express";
 import axios from "axios";
+import { productModel } from "../models/product.model.js";
 
 const router = express.Router();
 
