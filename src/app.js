@@ -41,6 +41,7 @@ socketServer.on("connection", async (socket) => {
     try {
         const products = await axios.get("http://localhost:8080/api/products") 
         socket.emit("products", products.data)
+        socket.emit("carts")
     } catch (error) {
         console.log(error)
     }
@@ -60,8 +61,11 @@ async function emitProductUpdates() {
 }
 
 app.get("/api/products", async (req, res) => {
-    const limit = req.query.limit ? parseInt(req.query.limit) : null
-    const products = await productManager.getProducts(limit);
+    const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const sort = req.query.sort ? req.query.sort : {};
+    const query = req.query.query ? JSON.parse(req.query.query) : {}; 
+    const products = await productManager.getProducts(query, sort, limit, page)
     res.setHeader("Content-Type", "application/json");
     res.send(JSON.stringify(products))
 })
@@ -118,11 +122,56 @@ app.get("/api/carts/:cid", async (req, res) => {
     res.send(JSON.stringify(carts))
 })
 
-app.post("/api/carts/:cid/products/:pid", (req, res) => {
+app.post("/api/carts/:cid/products/:pid", async (req, res) => {
     try {
-        cartManager.updateCartById(req.params.cid, req.params.pid);
+        await cartManager.updateCartById(req.params.cid, req.params.pid);
         return res.status(200).send({status: "success", message: "product added to cart"})
     } catch (productError) {
         return res.status(400).send({status: "error", error: productError.message})
     }
 })
+
+
+app.delete('/api/carts/:cid/products/:pid', async (req, res) => {
+    const { cid, pid } = req.params;
+    try {
+        const cart = await cartManager.removeProductFromCart(cid, pid);
+        return res.status(200).json({ message: 'Product removed from cart', cart });
+    } catch (error) {
+        return res.status(404).json({ error: error.message });
+    }
+});
+
+
+app.put('/api/carts/:cid', async (req, res) => {
+    const { cid } = req.params;
+    const products = req.body;
+    try {
+        const cart = await cartManager.updateCartProducts(cid, products);
+        return res.status(200).json({ message: 'Cart updated', cart });
+    } catch (error) {
+        return res.status(404).json({ error: error.message });
+    }
+});
+
+app.delete('/api/carts/:cid', async (req, res) => {
+    const { cid } = req.params;
+    try {
+        const cart = await cartManager.removeAllProductsFromCart(cid);
+        return res.status(200).json({ message: 'Products removed from cart', cart });
+    } catch (error) {
+        return res.status(404).json({ error: error.message });
+    }
+});
+
+app.put('/api/carts/:cid/products/:pid', async (req, res) => {
+    const { cid, pid } = req.params;
+    const body = req.body;    
+    try {
+        const cart = await cartManager.updateProductQuantityByCartIdAndProductId(cid, pid, body);
+        console.log(cart)
+        return res.status(200).json({ message: 'Product quantity updated', cart });
+    } catch (error) {
+        return res.status(404).json({ error: error.message });
+    }
+});

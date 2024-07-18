@@ -23,11 +23,18 @@ export default class ProductsManagerMongo {
         return await product.save();
     }
 
-    async getProducts(limit) {
-        if (limit) {
-            return await this.products.find().limit(limit);
-        } else {
-            return await this.products.find();
+    async getProducts(query, sort, limit, page) {
+        const options = {
+            page: page,
+            limit: limit,
+            sort: sort
+        };
+        try {
+            const result = await this.products.paginate(query, options);
+            return result;
+        } catch (error) {
+            console.error('Error fetching products:', error);
+            throw error;
         }
     }
 

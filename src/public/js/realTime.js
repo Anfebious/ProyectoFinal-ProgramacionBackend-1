@@ -14,16 +14,8 @@ function updateProducts(docs) {
     container.innerHTML = "";
     docs.forEach(product => {
         const item = document.createElement("li");
-        item.textContent = product.description;
-        const button = document.createElement("button");
-        button.className = "product-btn";
-        button.setAttribute("data-id", product._id);
-        button.textContent = "Agregar al Carrito";
-        item.appendChild(button);
-        container.appendChild(item);
-        button.addEventListener('click', function() {
-            agregarAlCarrito(product._id)
-        });
+        item.textContent = JSON.stringify(product);
+        container.appendChild(item)
     });
 }
 async function getNextPage() {
@@ -41,10 +33,4 @@ async function getPrevPage() {
     currentPage = products.page;
     nextPage = products.nextPage;
     prevPage = products.prevPage;
-}
-async function agregarAlCarrito(productId) {
-    const cartId = "66972d13ead2566399043270" //Por el momento, esto va a estar hardcodeado
-    const response = await fetch("http://localhost:8080/api/carts/" + cartId + "/products/" + productId, {
-        method: "POST"
-    }) 
 }
