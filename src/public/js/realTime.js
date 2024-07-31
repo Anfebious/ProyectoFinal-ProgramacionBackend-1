@@ -12,10 +12,15 @@ socket.on("products", (data) => {
 function updateProducts(docs) {
     const container = document.getElementById("container");
     container.innerHTML = "";
+    const list = document.createElement("ul")
+    container.appendChild(list)
     docs.forEach(product => {
         const item = document.createElement("li");
-        item.textContent = JSON.stringify(product);
-        container.appendChild(item)
+        for (const [key, value] of Object.entries(product)) {
+            item.innerHTML += "<strong>" + key + ": </strong>" + value + "<br>";
+        }
+        // item.textContent = JSON.stringify(product);
+        list.appendChild(item)
     });
 }
 async function getNextPage() {

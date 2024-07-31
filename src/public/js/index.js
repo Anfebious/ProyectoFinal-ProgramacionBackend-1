@@ -12,15 +12,20 @@ socket.on("products", (data) => {
 function updateProducts(docs) {
     const container = document.getElementById("container");
     container.innerHTML = "";
+    const list = document.createElement("ul")
+    container.appendChild(list)
     docs.forEach(product => {
         const item = document.createElement("li");
-        item.textContent = product.description;
+        for (const [key, value] of Object.entries(product)) {
+            item.innerHTML += "<strong>" + key + ": </strong>" + value + "<br>";
+        }
+        // item.textContent = product.description;
         const button = document.createElement("button");
         button.className = "product-btn";
         button.setAttribute("data-id", product._id);
         button.textContent = "Agregar al Carrito";
         item.appendChild(button);
-        container.appendChild(item);
+        list.appendChild(item);
         button.addEventListener('click', function() {
             agregarAlCarrito(product._id)
         });

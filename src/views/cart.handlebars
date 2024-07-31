@@ -1,7 +1,12 @@
-<p id="{{cartId}}">
-    Cart ID: {{cartId}}
+<p id="{{this.cart._id}}">
+    Cart ID: {{this.cart._id}}
 </p>
 <div id="container">
+    <ul>
+        {{#each cart.products}}
+        <li>{{#each this}}<strong>{{@key}}:</strong> {{this}}<br>{{/each}}</li>
+        {{/each}}
+    </ul>
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/cart.js"></script>
